@@ -1,0 +1,39 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Normal,Source Han Sans SC,96,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,1,0,0,0,100,100,4,0,1,5,3,2,40,40,110,1
+Style: CTA,Source Han Sans SC Heavy,144,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,1,1,0,0,100,100,6,0,1,7,4,2,40,40,120,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:01.99,Normal,,0,0,0,,古代将军最大的敌人不是敌军
+Dialogue: 0,0:00:01.99,0:00:03.53,Normal,,0,0,0,,{\c&H0000D7FF&}10万{\c&H00FFFFFF&}出关只回来{\c&H0000D7FF&}3千{\c&H00FFFFFF&}
+Dialogue: 0,0:00:03.53,0:00:05.62,Normal,,0,0,0,,{\c&H0000D7FF&}汉武帝{\c&H00FFFFFF&}远征{\c&H0000D7FF&}匈奴{\c&H00FFFFFF&}正史明确记载
+Dialogue: 0,0:00:05.62,0:00:06.91,Normal,,0,0,0,,骑兵{\c&H0000D7FF&}10万{\c&H00FFFFFF&}出长城
+Dialogue: 0,0:00:06.91,0:00:07.87,Normal,,0,0,0,,回来只剩{\c&H0000D7FF&}3千{\c&H00FFFFFF&}
+Dialogue: 0,0:00:07.87,0:00:09.96,Normal,,0,0,0,,这其中{\c&H0000D7FF&}90%{\c&H00FFFFFF&}的损耗不是战死
+Dialogue: 0,0:00:09.96,0:00:11.73,Normal,,0,0,0,,是冻死、饿死、迷路掉队
+Dialogue: 0,0:00:11.73,0:00:14.79,Normal,,0,0,0,,古代行军最大的杀手从来都不是对面那条线
+Dialogue: 0,0:00:14.79,0:00:17.20,Normal,,0,0,0,,而是粮草、地图、天气和编制崩溃
+Dialogue: 0,0:00:17.20,0:00:18.00,Normal,,0,0,0,,后勤断一天
+Dialogue: 0,0:00:18.00,0:00:19.13,Normal,,0,0,0,,部队就要散一半
+Dialogue: 0,0:00:19.13,0:00:20.28,Normal,,0,0,0,,但在{\c&H0000D7FF&}万国觉醒{\c&H00FFFFFF&}里
+Dialogue: 0,0:00:20.28,0:00:21.60,Normal,,0,0,0,,你完全不用愁这个
+Dialogue: 0,0:00:21.60,0:00:22.26,Normal,,0,0,0,,一键调兵
+Dialogue: 0,0:00:22.26,0:00:23.25,Normal,,0,0,0,,从北疆到西域
+Dialogue: 0,0:00:23.25,0:00:24.90,Normal,,0,0,0,,1小时部队整建制到位
+Dialogue: 0,0:00:24.90,0:00:25.39,Normal,,0,0,0,,零损耗
+Dialogue: 0,0:00:25.39,0:00:27.34,Normal,,0,0,0,,30多位真实历史名将随你调度
+Dialogue: 0,0:00:27.34,0:00:29.84,Normal,,0,0,0,,{\c&H0000D7FF&}吕布{\c&H00FFFFFF&}、{\c&H0000D7FF&}霍去病{\c&H00FFFFFF&}、{\c&H0000D7FF&}卫青{\c&H00FFFFFF&}都有独特的技能加成
+Dialogue: 0,0:00:29.84,0:00:31.65,Normal,,0,0,0,,再配上{\c&H0000D7FF&}中式弓骑兵{\c&H00FFFFFF&}的远程压制
+Dialogue: 0,0:00:31.65,0:00:33.05,Normal,,0,0,0,,开局就能打出{\c&H0000D7FF&}降维{\c&H00FFFFFF&}优势
+Dialogue: 0,0:00:33.05,0:00:34.16,Normal,,0,0,0,,部队走到哪打到哪
+Dialogue: 0,0:00:34.16,0:00:35.73,CTA,,0,0,0,,{\fad(150,150)}想体验真实历史调度
+Dialogue: 0,0:00:35.73,0:00:37.12,CTA,,0,0,0,,{\fad(150,150)}{\c&H000000FF&}{\c&H000000FF&}现在{\c&H00FFFFFF&}{\c&H000000FF&}下载{\c&H00FFFFFF&}{\c&H00FFFFFF&}{\c&H000000FF&}万国觉醒{\c&H00FFFFFF&}
+Dialogue: 0,0:00:37.12,0:00:38.17,CTA,,0,0,0,,{\fad(150,150)}带上你的{\c&H000000FF&}名将{\c&H00FFFFFF&}
+Dialogue: 0,0:00:38.17,0:00:39.21,CTA,,0,0,0,,{\fad(150,150)}{\c&H000000FF&}征服{\c&H00FFFFFF&}整个世界

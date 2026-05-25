@@ -1,0 +1,11 @@
+game_name: "ROK 万国觉醒"
+game_genre: "SLG / 4X 策略"
+game_visual_style: "卡通写实 3D, 卡牌+大地图 RTS, 蓝金主色调"
+pivot_keyword_hint: "万国觉醒里"
+target_audience: "全球 SLG 用户"
+
+# v1.2 新增 4 字段 — Step 2 + Step 3 文化/视觉锚定
+part1_anchor: "Ancient civilization era with culturally consistent characters and period-accurate costumes; Han Dynasty for Chinese segments with fully Asian East Asian Chinese soldiers, Roman for Roman segments; authentic period armor and weapons"
+part2_anchor: "Cartoon-realistic 3D RTS 4X strategy game CG, vibrant blue-gold color grading, card-based hero showcase, RTS map view, cinematic lighting"
+part1_neg_extra: "non-asian people in Chinese segments, european faces in Han Dynasty, modern clothing, modern equipment, modern weapons"
+forbidden_language_neg: "latin letters, english characters, download button, click here"

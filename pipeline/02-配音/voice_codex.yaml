@@ -1,0 +1,192 @@
+# 极客视频"语音 codex" v1.0
+# 用途：约束 TTS 生成阶段（Step 1 产出），让 AI 配音 1:1 复刻极客口播节奏
+# 输入样本：65 条极客头部视频（ROK/WGAME/Samo）
+# 工具链：ffmpeg 抽音轨 + faster-whisper large-v3 (word-level ASR) + Silero VAD (气口)
+# 统计单位：中文按"字"算（CPS = 字/秒），换算 WPM = CPS × 60
+# 日期：2026-05-21
+
+meta:
+  version: "1.0"
+  sample_size: 65
+  sample_source: "极客 KOL 头部 / 中段 / 尾段视频 (ROK/WGAME/Samo)"
+  excluded: 12  # 无口播 / Whisper 误识 / 非极客文件，详见 stats/无口播_blacklist.txt
+  tools:
+    asr: "faster-whisper large-v3 (GPU float16, word_timestamps=True)"
+    vad: "Silero VAD (threshold=0.5, min_silence=80ms, min_speech=150ms)"
+  date: "2026-05-21"
+
+# ─────────────────────────────────────────────
+# 一、全局节奏（极客 KOL 的"基线"）
+# ─────────────────────────────────────────────
+global:
+  target_cps: 6.11      # 中文字/秒（核心指标）
+  target_wpm: 367       # 等价字/分钟
+  safe_range_wpm: [337, 393]  # P25-P75，TTS 必须落在此区间
+  extreme_min_wpm: 240
+  extreme_max_wpm: 413  # 实测样本最高，再快 TTS 会失真
+  voice_ratio: 1.00     # 全片人声/总时长 = 100%（几乎无 BGM-only 段）
+  # 与"普通人说话"对比：成人正常 200-280 WPM，极客 ≈1.5x
+
+# ─────────────────────────────────────────────
+# 二、段位级节奏（按 v0.9.1 semantic_role）
+# ─────────────────────────────────────────────
+# 关键规律：节奏曲线 = Hook(快) → BG/Core_K(中) → Ad_R(中快) → Selling(中) → CTA(慢)
+segment_pacing:
+
+  Hook_Counter_Intuitive:
+    wpm_target: 386
+    wpm_range: [352, 412]
+    cps_target: 6.43
+    duration_p50_sec: 7.6
+    rank: "最快档（与 Background 并列）"
+    n_samples: 61
+    rule: "钩子段必须高速冲击，制造信息密度+紧迫感。3 秒内必须抛出反差/疑问"
+
+  Background:
+    wpm_target: 385
+    wpm_range: [335, 404]
+    cps_target: 6.42
+    duration_p50_sec: 10.0
+    rank: "最快档"
+    n_samples: 27
+    rule: "世界观铺垫但不放慢，承接 Hook 高密度。可选段（极客 60% 视频跳过此段）"
+
+  Core_Knowledge:
+    wpm_target: 365
+    wpm_range: [332, 385]
+    cps_target: 6.08
+    duration_p50_sec: 12.0
+    rank: "中速"
+    n_samples: 61
+    rule: "知识科普段，需要观众消化，比 Hook 慢约 5%，但仍高于普通解说"
+
+  Ad_Reversal:
+    wpm_target: 377
+    wpm_range: [353, 398]
+    cps_target: 6.29
+    duration_p50_sec: 8.1
+    rank: "中快档"
+    n_samples: 55
+    rule: "知识→广告的反转点，节奏小幅回升制造爽感，BGM 同时突变"
+
+  Selling_Point:
+    wpm_target: 364
+    wpm_range: [340, 385]
+    cps_target: 6.07
+    duration_p50_sec: 12.0
+    rank: "中速"
+    n_samples: 69
+    rule: "游戏卖点段，节奏与 Core_K 持平。BGM 继承 Ad_R 高潮"
+
+  CTA:
+    wpm_target: 346
+    wpm_range: [309, 370]
+    cps_target: 5.77
+    duration_p50_sec: 5.0
+    rank: "最慢档（必须）"
+    n_samples: 57
+    rule: "行动指令段，必须留呼吸给用户。**红线：WPM 严禁 >380**"
+
+# ─────────────────────────────────────────────
+# 三、气口控制（极客 DNA：极致连续）
+# ─────────────────────────────────────────────
+# 关键发现：65 条样本中位气口总时长 = 0s, P90 = 0.83s
+# 极客的口播经过专业剪辑，所有 ≥100ms 的自然停顿都被剪掉
+breath_control:
+  rule_1_inner_segment_max_ms: 80
+  rule_2_inter_segment_max_ms: 300
+  rule_3_total_max_sec: 1.0
+  rule_4_voice_ratio_min: 0.95
+  enforcement_post_tts:
+    - "ffmpeg silenceremove 一刀切 ≥150ms 的气口"
+    - "atempo 1.02-1.05 全片轻微加速（防 TTS 自带节奏偏慢）"
+    - "VAD 验证人声段总时长占比 ≥0.95"
+  rationale: |
+    普通解说每分钟 6-12 次自然换气（200-500ms 气口）。极客视频几乎是 0。
+    这是极客"信息密度"美学的物理来源——观众感觉"被信息推着走"。
+    TTS 输出后必须二次剪辑压气口，不能直接用 TTS 生成的"自然停顿"音频。
+
+# ─────────────────────────────────────────────
+# 四、语义-节奏映射规则（给 TTS 写 SSML / 给文案分段时用）
+# ─────────────────────────────────────────────
+semantic_pacing_mapping:
+
+  痛点_悬念:
+    matches_semantic_roles: ["Hook_Counter_Intuitive", "Background"]
+    wpm_range: [380, 410]
+    cadence: "极致密集，无可感停顿"
+    reason: "钩子+背景段定整片节奏基线，必须最快"
+
+  知识铺垫:
+    matches_semantic_roles: ["Core_Knowledge"]
+    wpm_range: [330, 390]
+    cadence: "略放缓 5%，关键术语前可有 100ms 微停顿"
+    reason: "知识需要 0.x 秒消化时间，但仍高于普通解说"
+
+  反转_卖点:
+    matches_semantic_roles: ["Ad_Reversal", "Selling_Point"]
+    wpm_range: [340, 400]
+    cadence: "Ad_R 起点轻微加速制造爽感，Selling 平稳"
+    reason: "反转点是情绪峰值，节奏配合 BGM 突变"
+
+  行动指令:
+    matches_semantic_roles: ["CTA"]
+    wpm_range: [310, 370]
+    cadence: "最慢档，每词清晰，留呼吸感"
+    reason: "用户必须有时间反应'我要不要下载'"
+
+# ─────────────────────────────────────────────
+# 五、TTS 验证检查清单（Step E 产出 mp3 后自动评分）
+# ─────────────────────────────────────────────
+tts_validation_checklist:
+  must_pass:
+    - id: "WPM-01"
+      check: "全片 WPM ∈ [338, 393]"
+      severity: critical
+    - id: "WPM-02"
+      check: "任一段位 WPM 不超出对应 segment_pacing.range 的 ±10%"
+      severity: critical
+    - id: "BREATH-01"
+      check: "全片气口总和（Silero VAD 检测）≤2s"
+      severity: critical
+    - id: "BREATH-02"
+      check: "人声占比（speech_total / duration）≥0.95"
+      severity: critical
+    - id: "CTA-01"
+      check: "CTA 段位 WPM 严禁 >380"
+      severity: high
+  must_not:
+    - id: "RATE-01"
+      check: "任一段位 WPM <240 或 >430"
+      severity: critical
+    - id: "GAP-01"
+      check: "出现 >500ms 的可感气口"
+      severity: high
+
+# ─────────────────────────────────────────────
+# 六、TTS 实施建议（火山引擎豆包 TTS）
+# ─────────────────────────────────────────────
+tts_implementation:
+  recommended_voice: "BV056 (解说男声) / BV701 (知性女声) / BV012 (爆款短视频音色)"
+  ssml_speed_mapping:
+    # 火山豆包 TTS speed 参数: 0.5-2.0 (1.0 为基准)
+    # 基准音色 ~250 WPM，映射方式：target_wpm / 250 = speed
+    Hook_Counter_Intuitive: 1.55  # 386/250
+    Background: 1.54
+    Core_Knowledge: 1.46
+    Ad_Reversal: 1.51
+    Selling_Point: 1.46
+    CTA: 1.38
+  post_processing_pipeline:
+    - step: "ffmpeg silenceremove start_periods=-1 stop_threshold=-30dB stop_duration=0.15"
+    - step: "ffmpeg atempo=1.03"  # 全片加速 3% 防 TTS 节奏过松
+    - step: "VAD 验证 voice_ratio ≥0.95"
+    - step: "切段后按 segment_pacing.wpm_range 校准"
+
+# ─────────────────────────────────────────────
+# 七、与 v0.9.1 codex 的衔接
+# ─────────────────────────────────────────────
+v091_link:
+  - "本 codex 替代 v0.9.1 中 'segment[].speech_rate_wpm' 字段的经验估算"
+  - "v0.9.1 BGM 突变规则（Ad_Reversal 起点 BGM 戛然）仍生效，由剪辑层控制"
+  - "v0.9.1 emotional_fuel 不直接映射语速（情绪强度由 BGM + 字幕颜色承担）"

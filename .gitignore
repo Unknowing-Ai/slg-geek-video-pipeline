@@ -1,0 +1,41 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Env / 密钥
+.env
+.env.*
+!.env.example
+
+# 大文件 / 中间产物（可由 scripts 重新生成）
+pipeline/02-配音/tts_output/
+pipeline/02-配音/vocal_only/
+pipeline/03-分镜/examples/*/images/
+pipeline/03-分镜/examples/*/task_ids.json
+pipeline/04-视频/v*_full/
+pipeline/05-字幕/step*/
+
+# Materials: 原始素材
+materials/
+
+# Huggingface / Demucs / torch 模型缓存
+.cache/
+~/.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# 临时文件
+*.log
+*.tmp
+
+# Claude Code 装载目录（每个 clone 跑 setup.sh 重生成）
+.claude/

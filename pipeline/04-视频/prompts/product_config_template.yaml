@@ -1,0 +1,45 @@
+# Step 3 视频生成 · 产品配置模板（跨产品复用）
+# 复制到 examples/<产品名>/product_config.yaml 后由宿主填写
+#
+# 关键：part1_anchor / part2_anchor / part1_neg_extra 是文化/视觉锚定，决定 video prompt 的种族/服装/时代正确性
+# 不同产品的填写示例见文件底部
+
+# ===== 必填基础 =====
+game_name: "<产品中英文全名>"
+game_genre: "<品类，如 SLG / 4X 策略 / 模拟经营 / 卡牌 RPG>"
+game_visual_style: "<一句话视觉风格，影响 Part 2 video prompt 后缀>"
+pivot_keyword_hint: "<转折句常用关键词，如 '万国觉醒里' / '战火勋章中' / '万龙觉醒里'>"
+target_audience: "<目标受众，如 '全球 SLG 用户' / '欧美军事题材爱好者' / '日韩二次元用户'>"
+
+# ===== Step 3 视频生成新增（必填） =====
+# Part 1 文化/服装/时代锚定 — 写进 video prompt 防止模型混入错误文化元素
+# 示例：
+#   ROK 万国觉醒（古代各文明）："Ancient civilization era with culturally consistent characters and period-accurate costumes; Han Dynasty for Chinese segments, Roman for Roman segments, no cultural mixing"
+#   WGAME 战火勋章（现代军事）："Modern military equipment and uniforms (NATO standard), realistic combat photography style, no fantasy elements, no medieval clothing"
+#   Samo 万龙觉醒（西方奇幻）："Western medieval fantasy with dragons knights and mages, period-accurate Tolkien-inspired costumes, no modern elements, no Asian-only restriction"
+#   HGame（日韩二次元）："Anime-styled characters with Japanese/Korean aesthetic, vibrant cel-shading look"
+#   F84（科幻）："Sci-fi future setting with futuristic suits and high-tech equipment, no medieval or historical elements"
+part1_anchor: "<由宿主填写：定义 Part 1 历史/纪实部分的文化/服装/时代锚定>"
+
+# Part 2 游戏画风锚定 — 默认从 game_visual_style 推断，可override
+# 示例：
+#   ROK："Cartoon-realistic 3D RTS 4X strategy game CG, blue-gold color grading, card-based hero showcase"
+#   WGAME："Photorealistic military strategy game CG, gritty desert/urban combat scenes, helicopter and tank focus"
+part2_anchor: "<由宿主填写：定义 Part 2 游戏 CG 部分的视觉风格 + 色调 + 镜头类型>"
+
+# Part 1 额外 NEG（用于排除该产品错误文化元素）
+# 示例：
+#   ROK："non-asian people in Chinese segments, european faces in Han Dynasty, modern clothing, modern equipment"
+#   WGAME："medieval armor, ancient weapons, swords, bows, fantasy elements"
+#   Samo："modern military, real-world country flags, contemporary politics"
+part1_neg_extra: "<由宿主填写：排除 Part 1 不应出现的元素，与 part1_anchor 互补>"
+
+# Part 2 额外 NEG
+part2_neg_extra: "<由宿主填写：排除 Part 2 不应出现的元素>"
+
+# ===== 投放语言禁词（按投放区域定）=====
+# 示例：
+#   中国境内投放："latin letters, english characters, download button, click here"
+#   海外英文区："chinese characters, japanese characters, korean characters, arabic characters"
+#   阿语区："latin letters, english characters, chinese characters, hebrew"
+forbidden_language_neg: "<由宿主填写：禁止出现的语言/文字类型>"

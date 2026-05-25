@@ -1,0 +1,61 @@
+# Step E 验证脚本：60s 极客风新作（用 voice_codex.yaml 规则推导）
+# 主题：古代远征损耗 vs ROK 一键调度
+# 总时长目标：60s | 总字数目标：366（=WPM 367 × 1分）
+
+meta:
+  title: "古代将军最大的敌人不是敌军"
+  total_duration_target_sec: 60
+  total_chars: 369  # 实际计数，对应 WPM 369（落 codex 安全区 [337, 393]）
+
+segments:
+  # 基准校准：第一次跑 speed=1.46 实测 503 WPM → 火山 ICL 克隆音色基准 ≈ 345 WPM
+  # 所有 speed_ratio = target_wpm / 345
+  - segment_id: 1
+    semantic_role: Hook_Counter_Intuitive
+    duration_target_sec: 5
+    target_wpm: 386
+    target_cps: 6.43
+    target_chars: 32
+    actual_chars: 32
+    speed_ratio: 1.12  # 386/345
+    text: "古代将军最大的敌人不是敌军？10万出关只回来3千。"
+
+  - segment_id: 2
+    semantic_role: Core_Knowledge
+    duration_target_sec: 22
+    target_wpm: 365
+    target_cps: 6.08
+    target_chars: 134
+    actual_chars: 134
+    speed_ratio: 1.06  # 365/345
+    text: "汉武帝远征匈奴正史明确记载，骑兵10万出长城，回来只剩3千。这其中90%的损耗不是战死，是冻死、饿死、迷路掉队。古代行军最大的杀手从来都不是对面那条线，而是粮草、地图、天气和编制崩溃。后勤断一天，部队就要散一半。"
+
+  - segment_id: 3
+    semantic_role: Ad_Reversal
+    duration_target_sec: 10
+    target_wpm: 377
+    target_cps: 6.29
+    target_chars: 63
+    actual_chars: 63
+    speed_ratio: 1.09  # 377/345
+    text: "但在万国觉醒里，你完全不用愁这个。一键调兵，从北疆到西域，1小时部队整建制到位，零损耗。"
+
+  - segment_id: 4
+    semantic_role: Selling_Point
+    duration_target_sec: 15
+    target_wpm: 364
+    target_cps: 6.07
+    target_chars: 91
+    actual_chars: 91
+    speed_ratio: 1.05  # 364/345
+    text: "30多位真实历史名将随你调度，吕布、霍去病、卫青都有独特的技能加成。再配上中式弓骑兵的远程压制，开局就能打出降维优势，部队走到哪打到哪。"
+
+  - segment_id: 5
+    semantic_role: CTA
+    duration_target_sec: 8
+    target_wpm: 346
+    target_cps: 5.77
+    target_chars: 49
+    actual_chars: 49
+    speed_ratio: 1.00  # 346/345 (CTA 最慢，speed 不超 1.05)
+    text: "想体验真实历史调度？现在下载万国觉醒，带上你的名将，征服整个世界。"
